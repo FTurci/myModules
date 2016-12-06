@@ -99,6 +99,8 @@ def subsamples_n(coords, minedge=[0,0,0],maxedge=[1.,1.,1.],divisions=[3.,3.,3.]
     Isolates spherical subsamples of N particles located on a mesh from a set of particle coordinates. It returns an array of labels for each particle.
     """
     s=[]
+    s_ids=[]
+    ids=np.arange(coords.shape[0])
     L=np.array(maxedge)-np.array(minedge)
     dx=np.linspace(minedge[0]+L[0]/divisions[0]/2., maxedge[0]-L[0]/divisions[0]/2.,divisions[0])
     dy=np.linspace(minedge[1]+L[1]/divisions[1]/2., maxedge[1]-L[1]/divisions[1]/2.,divisions[1])
@@ -107,13 +109,17 @@ def subsamples_n(coords, minedge=[0,0,0],maxedge=[1.,1.,1.],divisions=[3.,3.,3.]
     X,Y,Z=np.meshgrid(dx,dy,dz)
     centers = np.vstack([X.ravel(), Y.ravel(), Z.ravel()]).T
     # print centers
+
     for c in xrange(centers.shape[0]):
         # print centers[c]
         dist2=np.sum((centers[c]-coords)**2, axis=1)
         # print dist2.shape
-        s.append(coords[dist2.argsort()][:N]-centers[c])
+        sel=dist2.argsort()
+        s.append(coords[sel][:N]-centers[c])
+        selected_ids=ids[sel][:N]
+        s_ids.append(selected_ids)
         # print "lens",len(s)
-    return s
+    return s, s_ids
 
 
 
