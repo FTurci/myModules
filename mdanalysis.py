@@ -6,7 +6,7 @@ def unfold_coordinates(trajectory,d):
     for i in xrange(1,trajectory.nframes):
             dr=trajectory.Frames[i].r[:,:d]-trajectory.Frames[i-1].r[:,:d]
             for k in xrange(d):
-                    L=trajectory.lengths[k]
+                    L=trajectory.Frames[i].lengths[k]
                     dr[:,k]=dr[:,k]-np.round(dr[:,k]/L)*L
                     if np.any(np.abs(dr[:,k])>=L*0.5):
                         print "too large displacement"
@@ -14,7 +14,7 @@ def unfold_coordinates(trajectory,d):
     # print unfolded_r.shape
     return unfolded_r
 
-def comupute_isf_d(trajectory,d,lengthscale=1.,threshold=10, unfold=True):
+def compute_isf_d(trajectory,d,lengthscale=1.,threshold=10, unfold=True):
     """Compute the self part of the Intermediate Scattering Function in d-dimensions."""
     if d==2:
         from scipy.special import jv

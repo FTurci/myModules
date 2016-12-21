@@ -37,7 +37,7 @@ class frame:
         self.lengths=self.boxinfo[:,1]-self.boxinfo[:,0] 
 
 class trajectory:
-    def __init__(self,filename,compression=None, format='atom', numframes='all',ensemble='NVT', every=1):
+    def __init__(self,filename,compression=None, format='atom', numframes='all',ensemble='NVT', every=1, startframe=0):
     # guess format
         if filename[-4:]=='.xyz':
             print "Identified .xyz file"
@@ -58,7 +58,7 @@ class trajectory:
             while True:
                 if not buf: 
                     break
-                elif count%every==0:
+                elif count%every==0 and count>startframe:
                     Frame,buf=read_lammps_atom_frame(filehandle)
                     if not buf:
                         break
@@ -161,9 +161,9 @@ def read_lammps_atom_frame(filehandle):
     
     table=np.array(table)
     if scaled:
-        table[:,-3]*=xlims[1]-xlims[0]
-        table[:,-2]*=ylims[1]-ylims[0]
-        table[:,-1]*=zlims[1]-zlims[0]
+        table[:,-3]=table[:,-3].astype(float)*(xlims[1]-xlims[0])
+        table[:,-2]=table[:,-2].astype(float)*(ylims[1]-ylims[0])
+        table[:,-1]=table[:,-1].astype(float)*(zlims[1]-zlims[0])
     F=frame(table,format='atom',timeframe=timeframe,boxinfo=[xlims, ylims, zlims])
     return F,buf
 
