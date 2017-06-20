@@ -1,0 +1,127 @@
+As voronoi method no individually specie-specie interaction length
+rcut 30 rcut2 900
+Xmol file name:/Users/ft14968/Dropbox/Matsu/ExperimentalData/Coordinates/5.31_080916Ai/T124_080916/T124_080916_6.xyz Box file name:box.txt
+ISNOTCUBIC 0
+FRAMES 1 N 19100 NA 19100 RHO 0.000495659 TSTART 0
+FRAMETSTEP 1 TFINAL 1 STARTFROM 0 SAMPLEFREQ 1
+rcutAA 30 rcutAB 30 rcutBB 30
+rcutAA2 900 rcutAB2 900 rcutBB2 900
+Vor 1 PBCs 1 fc 1 nB 30 USELIST 0
+write bonds file 0 doWriteClus 0 doWriteRaw 0 doWritePopPerFrame 1
+binWidth 0.02 doBLDistros 0 doClusBLDistros 0 doClusBLDeviation 0
+donbDistros 0 doBondedCen 0 doClusComp 0 doSubClusts 0
+doPotential 0 doCoslovich 0 doDynamics 0 talpha 1 PRINTINFO 1
+
+calculating box sides from RHO
+box side length = 337.77, half side: 168.88
+
+box size file: box.txt
+d0 reading coordinate frames from /Users/ft14968/Dropbox/Matsu/ExperimentalData/Coordinates/5.31_080916Ai/T124_080916/T124_080916_6.xyz
+
+d0 initializing static variables...d0 completed
+d0 begin main loop
+d0 Setup_Readxyz(): TCC analysis frame 0/0 - reading in 19100 particles frame 0 of XMOL
+d0 f0 part19099 A -92.778 142.01 -122.92
+
+d0 Vor: N19100 NA19100 rcut2 900
+d0 Voronoi fc 1 rcutAA 30
+d0 Periodic Boundary Conditions - PBC bonds
+
+d0 Bonds_GetBondsV(): particle 1000 of 19100 done
+d0 Bonds_GetBondsV(): particle 2000 of 19100 done
+d0 Bonds_GetBondsV(): particle 3000 of 19100 done
+d0 Bonds_GetBondsV(): particle 4000 of 19100 done
+d0 Bonds_GetBondsV(): particle 5000 of 19100 done
+d0 Bonds_GetBondsV(): particle 6000 of 19100 done
+d0 Bonds_GetBondsV(): particle 7000 of 19100 done
+d0 Bonds_GetBondsV(): particle 8000 of 19100 done
+d0 Bonds_GetBondsV(): particle 9000 of 19100 done
+d0 Bonds_GetBondsV(): particle 10000 of 19100 done
+d0 Bonds_GetBondsV(): particle 11000 of 19100 done
+d0 Bonds_GetBondsV(): particle 12000 of 19100 done
+d0 Bonds_GetBondsV(): particle 13000 of 19100 done
+d0 Bonds_GetBondsV(): particle 14000 of 19100 done
+d0 Bonds_GetBondsV(): particle 15000 of 19100 done
+d0 Bonds_GetBondsV(): particle 16000 of 19100 done
+d0 Bonds_GetBondsV(): particle 17000 of 19100 done
+d0 Bonds_GetBondsV(): particle 18000 of 19100 done
+d0 Bonds_GetBondsV(): particle 19000 of 19100 done
+d0 Got Bonds
+
+d0 Nclus = 18620
+d0 f0 complete
+d0 Writing pop_per_frame  ....d0 Closed file /Users/ft14968/Dropbox/Matsu/ExperimentalData/Coordinates/5.31_080916Ai/T124_080916/T124_080916_6.xyz.rcAA30.rcAB30.rcBB30.Vor1.fc1.PBCs1.pop_per_frame
+
+
+d0 Clust	Number	Gross	Net	Mean Pop Per Frame
+d0 sp3	127618	19100	0	1
+d0 sp3a	14535	14897	0	0.77995
+d0 sp3b	52026	18743	0	0.98131
+d0 5A_D3h	61057	18486	76	0.96785
+d0 sp4	29241	18745	0	0.98141
+d0 sp4a	10243	12721	0	0.66602
+d0 sp4b	10700	16275	0	0.85209
+d0 sp4c	8298	13367	0	0.69984
+d0 6A_Oh	5106	13367	33	0.69984
+d0 6Z_C2v	126968	18356	254	0.96105
+d0 sp5	66620	19078	0	0.99885
+d0 sp5a	21808	17733	0	0.92843
+d0 sp5b	34423	18696	0	0.97885
+d0 7A_D5h	10389	14867	5	0.77838
+d0 7K	81340	17790	0	0.93141
+d0 8A_D2d	8524	14949	1097	0.78267
+d0 8B_Cs	64930	16578	1495	0.86796
+d0 8K	6106	10792	464	0.56503
+d0 9A_D3h	59	519	129	0.027173
+d0 9B_C2v	15864	13117	1091	0.68675
+d0 9K	3180	9077	1139	0.47524
+d0 10A_D4d	15	150	37	0.0078534
+d0 10B_C3v	5163	9012	186	0.47183
+d0 10K	18	162	33	0.0084817
+d0 10W	2	20	10	0.0010471
+d0 11A_D4d	0	0	0	0
+d0 11B_C2v	0	0	0	0
+d0 11CD	4282	7722	2233	0.40429
+d0 11E_C2	10356	10475	3990	0.54843
+d0 11F_C2v	1228	6353	2393	0.33262
+d0 11W_Cs	159	1182	399	0.061885
+d0 12A_C2v	10	120	112	0.0062827
+d0 12BC	744	2555	2003	0.13377
+d0 12D_D2d	1262	5281	4688	0.27649
+d0 12E_D3h	228	2264	1924	0.11853
+d0 12K	0	0	0	0
+d0 13A_Ih	41	505	505	0.02644
+d0 13B_D5h	6	77	77	0.0040314
+d0 13K	34	215	215	0.011257
+d0 FCC_m13	21	259	259	0.01356
+d0 HCP_m13	4	52	52	0.0027225
+d0 BCC_m9	1322	7176	7176	0.37571
+d0 BCC_m15	1	15	15	0.00078534
+d0 totals	552154	18620	19100
+d0 maxnB	20
+d0 max to sp3	4
+d0 max to sp4	2
+d0 max to sp5	2
+d0 excess spindles sp3	925
+d0 excess spindles sp4	0
+d0 excess spindles sp5	0
+d0 5A spindle bonds	852	0.0139541739685867
+d0 sp4c spindle bonds	3510	0.422993492407809
+d0 6A spindle bonds	3510	0.687426556991774
+d0 7A spindle bonds	10140	0.976032341900087
+d0 correctedBonds 0 per frame 0 per part per frame 0
+
+d0 Written /Users/ft14968/Dropbox/Matsu/ExperimentalData/Coordinates/5.31_080916Ai/T124_080916/T124_080916_6.xyz.rcAA30.rcAB30.rcBB30.Vor1.fc1.PBCs1.static_clust
+
+
+
+d0 FIN 
+
+
+
+d0 after barrier 
+
+
+
+d0 after finalize 
+

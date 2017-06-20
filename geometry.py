@@ -384,3 +384,64 @@ def voronoi2d(Frame,maximumdistance,radii, save=True):
             d.close()
 
         return cells
+
+from numba import autojit, jit
+
+@autojit
+def similar(type_series, len_neighs, edges):
+    similarity=np.zeros(len(len_neighs))
+    for i in range(len(len_neighs)-1):
+        # print i
+        if similarity[i]==0:
+            similarity[i]=similarity.max()+1
+        for j in range(i, len(len_neighs)):
+            # if neither is an edge particle
+            if edges[i]==False and edges[j]==False:
+                # check for similarity
+                # 1 - check for the number of neighbours
+                if len_neighs[i]==len_neighs[j]:          
+                    # 2 - check the types of neighbours in the right order
+            #         # to do so, double the string representing the types of neioghbours
+            #         # and check that the types of 1 are in types of 2
+                    criterium= type_series[i] in type_series[j]*2
+                    if criterium:
+                        similarity[j]=similarity[i]
+    return similarity
+
+def voronoi_similarity2d(cells, types):
+    # first, sort the cells by volume
+    # sorted_cells=sorted(cells, key=lambda  x: x['volume'])
+    volumes=[c['volume'] for c in cells]
+    len_neighs=[len(c['faces']) for c in cells]
+    edges=[]
+    # build list of types
+    type_series=[]
+    for c in cells:
+        edge=False
+        type_list=[]
+        for f in c['faces']:
+            face=f['adjacent_cell']
+            if face<0:
+                edge=True
+                break
+            else:
+                type_list.append(types[face])
+        edges.append(edge)
+        type_series.append(''.join(map(str,type_list)))
+
+    return similar(type_series,len_neighs,edges)
+
+
+ # def voronoi_plot2d(cells, pylab_module):
+ #    from matplotlib.path import Path
+ #    for cell in cells:
+ #        vertices=cell['vertices']
+ #        codes = [Path.MOVETO]
+ #        for i in len(1,vertices-1):
+ #            codes.append(Path.LINETO)
+ #        codes.append(Path.CLOSEPOLY)
+ #        path=Path(vertices,codes)
+ #        pylab_module
+         
+
+

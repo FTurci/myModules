@@ -1,5 +1,5 @@
 import numpy as np
-
+import pandas as pd
 def unfold_coordinates(trajectory,d):
     unfolded_r=np.zeros((trajectory.N, d,trajectory.nframes))
     unfolded_r[:,:,0]=trajectory.Frames[0].r[:,:d]
@@ -56,3 +56,38 @@ def compute_isf_d(trajectory,d,lengthscale=1.,threshold=10, unfold=True):
                     isf[tt-t]+=(np.sinc(2*dr/lengthscale)).sum() #sinc is defined as sin(pi x)/(pi x)
 
     return (isf/(nsamples*trajectory.N))[1:], nsamples[1:]
+
+def read_log(filename):
+    print "Reading logfile", filename
+    thermo=[]
+    # read the thermo output
+    # go to line befor the opuput
+    read_thermo=False
+    with open(filename,'r') as fin:
+        for line in fin:     
+            split = line.split()
+            if len(split)>0:
+                if read_thermo:
+                    thermo.append(line)
+
+                if split[0]=='Memory':
+                    read_thermo=True
+                if split[0]=="Loop":
+                    read_thermo=False
+
+    # construct a pandas data structure
+    thermo=thermo[:-1]
+    if len(thermo)==0:
+        print "===> ERROR: Logfile",filename, "empty. Aborting."
+        import sys
+        sys.exit(0)
+    header=thermo[0].split()
+    thermo=[line.split() for line in thermo]
+    table=np.array(thermo[1:]).astype(float)
+    ncols=table.shape[1]
+    dictionary={}
+    for i in range(ncols):
+        dictionary[header[i]]=table[:,i]
+    dataFrame=pd.DataFrame(dictionary)
+    return dataFrame
+
