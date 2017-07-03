@@ -176,7 +176,7 @@ class TCC(object):
 				if count> 42:
 					break
 
-classifier = TCC("/Users/ft14968/Dropbox/Francesco/StudentsProjects/WritingConnection/fig/snapshots/phi001-be10.xyz",1, rho='guess', fc=0.82)
+#classifier = TCC("/Users/ft14968/Dropbox/Francesco/StudentsProjects/WritingConnection/fig/snapshots/phi001-be10.xyz",1, rho='guess', fc=0.82)
 
 # print classifier.filename, classifier.boxType, classifier.box, classifier.Na, classifier.rho
 		
