@@ -112,7 +112,7 @@ def prepare(fileName, rho):
 
 class TCC(object):
 	"""Construct a TCC classifier for TCC. It executes the (precompiled) TCC code and returns the statistics per cluster."""
-	def __init__(self, fileName, totalFrames,desiredFrames='all',rcut=2.,fc=1,rho=None,boxType=0, box=None,startFrom=0, frequency=1,bondType=1,pbc=True,bonds=False, raw=False,_11a=False, _13a=False, pop=True):
+	def __init__(self, fileName, totalFrames,desiredFrames='all',rcut=2.,fc=1,rho=None,boxType=0, box=None,startFrom=0, frequency=1,bondType=1,pbc=True,bonds=False, raw=False,_11a=False, _13a=False, pop=False):
 		super(TCC, self).__init__()
 
 
@@ -145,7 +145,7 @@ class TCC(object):
 		if desiredFrames=="all":
 			desiredFrames=totalFrames
 
-		inputparameters(self.xyzFileName,self.boxType,desiredFrames,totalFrames, self.N,self.Na,self.rho, [rcut],fc,boxName="box.txt", startFrom=0, frequency=1,bondType=1,pbc=True,bonds=False, raw=False,_11a=False, _13a=False, pop=True)
+		inputparameters(self.xyzFileName,self.boxType,desiredFrames,totalFrames, self.N,self.Na,self.rho, [rcut],fc,boxName="box.txt", startFrom=0, frequency=1,bondType=1,pbc=pbc,bonds=bonds, raw=raw,_11a=_11a, _13a=_13a, pop=pop)
 		
 		output=subprocess.check_output("~/bin/TCC", shell=True)
 
@@ -158,7 +158,7 @@ class TCC(object):
 		self.net={}
 		self.pop={}
 		with open(glob.glob(fileName+"*fc%g*PBCs%d*static_clust"%(fc,pbc))[0], 'r') as fin:
-			print fin.readline()
+			fin.readline()
 			fin.readline()
 			count=0
 
