@@ -132,7 +132,7 @@ class TCC(object):
 				quit()
 			with open("box.txt",'w') as fw:
 				fw.write("#iter Lx Ly Lz\n")
-				fw.write("0 %g %g %g\n"%(self.box[0],self.box[0],self.box[1]))	
+				fw.write("0 %g %g %g\n"%(self.box[0],self.box[1],self.box[2]))	
 
 		if rho==None or rho=='guess':
 			self.rho=self.N/self.box[0]/self.box[1]/self.box[2]
