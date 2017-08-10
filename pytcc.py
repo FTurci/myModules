@@ -145,7 +145,7 @@ class TCC(object):
 		if desiredFrames=="all":
 			desiredFrames=totalFrames
 
-		inputparameters(self.xyzFileName,self.boxType,desiredFrames,totalFrames, self.N,self.Na,self.rho, [rcut],fc,boxName="box.txt", startFrom=0, frequency=1,bondType=1,pbc=pbc,bonds=bonds, raw=raw,_11a=_11a, _13a=_13a, pop=pop)
+		inputparameters(self.filename,self.boxType,desiredFrames,totalFrames, self.N,self.Na,self.rho, [rcut],fc,boxName="box.txt", startFrom=0, frequency=1,bondType=1,pbc=pbc,bonds=bonds, raw=raw,_11a=_11a, _13a=_13a, pop=pop)
 		
 		output=subprocess.check_output("~/bin/TCC", shell=True)
 

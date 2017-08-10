@@ -292,14 +292,14 @@ def rigid_transform_3D(A, B):
     return R, t
 
 
-def gyration_tensor(r, Print=False):
+def gyration_tensor(_r, Print=False):
     from scipy.linalg import eig
     import sys 
-    N=r.shape[0]
+    N=_r.shape[0]
     # centre of mass
-    r_cm=np.mean(r,axis=0)
+    r_cm=np.mean(_r,axis=0)
     # remove the centre of mass
-    r-=r_cm
+    r=_r-r_cm
     # initialize the tensor to zero
     S=np.zeros((3,3))
     S=np.matrix(S)
