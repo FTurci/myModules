@@ -7,10 +7,7 @@ class frame:
         if format=='atom':
             self.ids=table[:,0].astype(int)
             # deal with string elements
-            if type(table[0,1])==str:
-                self.types=table[:,1]
-            else:
-                self.types=table[:,1].astype(int)
+            self.types=table[:,1].astype(int)
             self.r=table[:,2:].astype(float)
         if format=='xyz':
             self.ids=np.arange(self.N).astype(int)
@@ -47,6 +44,7 @@ class trajectory:
             format="atom"
 
         if format=='atom':
+            print "Assuming format: atom"
             if compression is None:
                 filehandle=open(filename, 'r')
             elif compression in 'gz':
