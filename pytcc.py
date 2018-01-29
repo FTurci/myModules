@@ -4,7 +4,7 @@ def inputparameters(xyzFileName,boxType,desiredFrames,totalFrames, N,Na,rho, rcu
 		replacement=(boxType, boxName,xyzFileName, desiredFrames,totalFrames,N,Na, rho, totalFrames,startFrom,frequency,rcut[0], rcut[1], rcut[2],bondType, pbc,fc,bonds,raw,_11a,_13a,pop)
 	else:
 		replacement=(boxType, boxName,xyzFileName, desiredFrames,totalFrames,N,Na, rho, totalFrames,startFrom,frequency,rcut[0], rcut[0], rcut[0],bondType, pbc,fc,bonds,raw,_11a,_13a,pop)
-
+ 
 	script="""[Box]	
 ; Specifies how to read simulation box
 box_type			= %d				; 0 if cubic NVT, 1 if system non-cubic NVT, 2 if system is NPT, 3 triclinc with tilt (INTEGER)
