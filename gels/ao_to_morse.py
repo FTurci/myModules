@@ -1,3 +1,4 @@
+from __future__ import print_function
 import numpy as np
 def reduced_second_virial(B2, sigma_eff):
 	return B2/(2./3.*np.pi*sigma_eff**2)
