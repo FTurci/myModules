@@ -78,14 +78,18 @@ def test_square_well():
 	tau = 1./(-4*(b2_star-1))
 	print ("\n*** Found : B2_star", b2_star,"tau",tau)
 
-def optimise_morse_epsilon_from_Uao(rho0, sigma, q,Uao):
+def optimise_morse_epsilon_from_Uao(rho0, sigma, q,Uao,numepsilons=10000):
+	""" Get optimised values for Morse's epsilon assuming beta=1"""
+
+	if type(Uao)!=list:
+		Uao = [Uao]
 	etap = [ etap_from_ao_contact(u,q) for u in Uao]
 
 	ao_params = [[q,sigma,e] for e in etap]
 	# compute the reduced B2 for morse for a range of temperatures
 
 	reduced_B2s_morse = []
-	epsilons = np.linspace(min(Uao)/2.,max(Uao)*2,10000)
+	epsilons = np.linspace(min(Uao)/2.,max(Uao)*2,numepsilons)
 	beta = 1.0
 
 	print ("\n ... Starting Mapping ...\n")
@@ -96,6 +100,8 @@ def optimise_morse_epsilon_from_Uao(rho0, sigma, q,Uao):
 		reduced_B2_morse = reduced_second_virial(B2_morse, effective_sigma_morse)
 		reduced_B2s_morse.append(reduced_B2_morse)
 
+	optimised_epsilons = []
+
 	for ao_p in ao_params:
 		print ("====> Uao ",ao_contact(ao_p[-1],q))
 		# Compute the reduced B2 for AO
@@ -104,6 +110,8 @@ def optimise_morse_epsilon_from_Uao(rho0, sigma, q,Uao):
 		reduced_B2_ao = reduced_second_virial(B2_ao, effective_sigma_ao)
 
 		eps ,pos= find_epsilon(epsilons,reduced_B2s_morse, reduced_B2_ao)
+		optimised_epsilons.append(eps)
+
 		print ("*** Morse BetaEpsilon", beta*eps)
 		print ("")
 		print ("AO reduced B2", reduced_B2_ao)
@@ -112,6 +120,7 @@ def optimise_morse_epsilon_from_Uao(rho0, sigma, q,Uao):
 		r = np.linspace(0.5,1.5,1000)
 		print ("Min AO", min(ao_potential(r,ao_p)))
 		print ("")
+	return optimised_epsilons
 
 def example():
 	# INPUT : 
