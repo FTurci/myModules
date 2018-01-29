@@ -1,10 +1,8 @@
-# October 2015
-# 
-# Writing a LAMMPS input file for a system with Morse interaction and gaussian polydispersity
+from __future__ import print_function
 import numpy as np
 from scipy.stats import norm
 import sys
-from __future__ import print_function
+
 
 def match_packing_fraction(input_packing_fraction,mu, polydispersity,N):
     """Find cubic box size for a system of N particles of mean size mu atgiven polydispersity"""
