@@ -384,6 +384,39 @@ def voronoi2d(Frame,maximumdistance,radii, save=True):
             d.close()
 
         return cells
+def voronoi2dxy(xy,framenumber,maximumdistance,radii, save=True):
+    shelveName="frame%d.shelve"%framenumber
+    import os
+    import shelve
+
+    if os.path.isfile(shelveName):
+        print "File", shelveName, "already exists"
+        d=shelve.open(shelveName)
+        return d['cells']
+    else:
+        import pyvoro
+        coords=np.array(xy)
+        # print coords
+        xlo=-100#np.floor(coords[:,0].min())-maximumdistance
+        ylo=-100#np.floor(coords[:,0].min())-maximumdistance
+        xhi=800#np.ceil(coords[:,0].max())+maximumdistance
+        yhi=800#np.ceil(coords[:,0].max())+maximumdistance
+        bounds=[[xlo,xhi], [ylo,yhi]]
+        # print bounds
+      
+        try:
+            cells=pyvoro.compute_2d_voronoi(coords,bounds,maximumdistance, periodic=[False,False], radii=radii, z_height=200)
+        except Exception, e:
+            print "Exception:",e
+            print "Attempting Reduced Radii Voronoi"
+            cells=pyvoro.compute_2d_voronoi(coords,bounds,maximumdistance, periodic=[False,False], radii=radii*0.9, z_height=200)
+        # if save:
+            
+        #     d=shelve.open(shelveName)
+        #     d['cells']=cells
+        #     d.close()
+
+        return cells
 
 from numba import autojit, jit
 
