@@ -133,6 +133,14 @@ class TCC(object):
 			with open("box.txt",'w') as fw:
 				fw.write("#iter Lx Ly Lz\n")
 				fw.write("0 %g %g %g\n"%(self.box[0],self.box[1],self.box[2]))	
+		if boxType==3:
+			self.box = box
+			if len(self.box)==0:
+				print "!!! boxtype=1 ==> NonCubic but box is ",self.box
+				quit()
+			with open("box.txt",'w') as fw:
+				fw.write("#iter Lx Ly Lz tilt\n")
+				fw.write("0 %g %g %g\n"%(self.box[0],self.box[1],self.box[2], self.box[3]))	
 
 		if rho==None or rho=='guess':
 			self.rho=self.N/self.box[0]/self.box[1]/self.box[2]
