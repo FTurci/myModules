@@ -116,7 +116,7 @@ class TCC(object):
 		super(TCC, self).__init__()
 
 
-		assert boxType<2, "!!! Handling only boxTypes 0 and 1"
+		assert ((boxType<2) or boxType==3), "!!! Handling only boxTypes 0, 1 and 3"
 
 		if boxType==0 and rho==None:
 			print "!!! boxType=0 ==> Cubic, but rho set to "+str(rho)
