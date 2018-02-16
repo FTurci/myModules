@@ -1,9 +1,9 @@
 import subprocess , os, inspect, glob
-def inputparameters(xyzFileName,boxType,desiredFrames,totalFrames, N,Na,rho, rcut,fc,boxName="box.txt", startFrom=0, frequency=1,bondType=1,pbc=True,bonds=False, raw=False,_11a=False, _13a=False, pop=True):
+def inputparameters(xyzFileName,boxType,desiredFrames,totalFrames, N,Na,rho, rcut,fc,boxName="box.txt", startFrom=0, frequency=1,bondType=1,pbc=True,bonds=False,clust=False, raw=False,_11a=False, _13a=False, pop=True):
 	if len(rcut)>1:
-		replacement=(boxType, boxName,xyzFileName, desiredFrames,totalFrames,N,Na, rho, totalFrames,startFrom,frequency,rcut[0], rcut[1], rcut[2],bondType, pbc,fc,bonds,raw,_11a,_13a,pop)
+		replacement=(boxType, boxName,xyzFileName, desiredFrames,totalFrames,N,Na, rho, totalFrames,startFrom,frequency,rcut[0], rcut[1], rcut[2],bondType, pbc,fc,bonds,clust,raw,_11a,_13a,pop)
 	else:
-		replacement=(boxType, boxName,xyzFileName, desiredFrames,totalFrames,N,Na, rho, totalFrames,startFrom,frequency,rcut[0], rcut[0], rcut[0],bondType, pbc,fc,bonds,raw,_11a,_13a,pop)
+		replacement=(boxType, boxName,xyzFileName, desiredFrames,totalFrames,N,Na, rho, totalFrames,startFrom,frequency,rcut[0], rcut[0], rcut[0],bondType, pbc,fc,bonds,clust,raw,_11a,_13a,pop)
  
 	script="""[Box]	
 ; Specifies how to read simulation box
@@ -39,7 +39,7 @@ potential_type		= 0		; 0 BLJ, 1 SFBLJ, 2 MorYuk: polydisp morse+yukawa, 3 not us
 [Output]		
 ; Determines what the TCC will output
 bonds 				= %d		; write out bonds file (BINARY INTEGER)
-clusts 				= 0		; write clusts_** files containing all clusters - USES LOTS OF HDD SPACE (BINARY INTEGER)
+clusts 				= %d		; write clusts_** files containing all clusters - USES LOTS OF HDD SPACE (BINARY INTEGER)
 raw 				= %d		; write raw_** xmol cluster files (BINARY INTEGER)
 11a 				= %d		; write centres of 11A (BINARY INTEGER)
 13a 				= %d		; write centres of 13A (BINARY INTEGER)
@@ -112,7 +112,7 @@ def prepare(fileName, rho):
 
 class TCC(object):
 	"""Construct a TCC classifier for TCC. It executes the (precompiled) TCC code and returns the statistics per cluster."""
-	def __init__(self, fileName, totalFrames,desiredFrames='all',rcut=2.,fc=1,rho=None,boxType=0, box=None,startFrom=0, frequency=1,bondType=1,pbc=True,bonds=False, raw=False,_11a=False, _13a=False, pop=False):
+	def __init__(self, fileName, totalFrames,desiredFrames='all',rcut=2.,fc=1,rho=None,boxType=0, box=None,startFrom=0, frequency=1,bondType=1,pbc=True,bonds=False, clust=False,raw=False,_11a=False, _13a=False, pop=False):
 		super(TCC, self).__init__()
 
 
