@@ -1,7 +1,5 @@
 import subprocess , os, inspect, glob
 def inputparameters(xyzFileName,boxType,desiredFrames,totalFrames, N,Na,rho, rcut,fc,boxName="box.txt", startFrom=0, frequency=1,bondType=1,pbc=True,bonds=False,clust=False, raw=False,_11a=False, _13a=False, pop=True):
-
-	print "clusts is ", clust
 	if len(rcut)>1:
 		replacement=(boxType, boxName,xyzFileName, desiredFrames,totalFrames,N,Na, rho, totalFrames,startFrom,frequency,rcut[0], rcut[1], rcut[2],bondType, pbc,fc,bonds,clust,raw,_11a,_13a,pop)
 	else:
