@@ -203,6 +203,7 @@ void s2 (double *s2,double *r,double* gr, double *x, double* y, double* z, doubl
 			}
 		}
 		s2[i] =-2.*M_PI *rho*trapz(integrand,r,nbins);
+		printf("%g\n",s2[i] );
 	}
 	free(integrand);
 	
