@@ -1,3 +1,4 @@
+from __future__ import division
 import numpy as np
 import ctypes
 import tqdm 
@@ -124,7 +125,7 @@ def local_s2(x,y,z,box,stdev,neighcut,rcut=None,nbins=200,epsilon=1e-8):
 	y = y.astype(np.float64)
 	z = z.astype(np.float64)
 	N = len(x)
-	rho = N/np.prod(box)
+	rho = N*1./np.prod(box)
 	box = np.array(box).astype(np.float64)
 
 	s2 = np.ones(N)
@@ -162,8 +163,10 @@ def save_xyzsl(filename,x,y,z,s,slocal):
 
 # EXAMPLE:
 
-x,y,z=np.loadtxt("centers020same_kernel_6_octaves_blur2_no_overlap_-0_radfix_14_8_3_16.xyz", skiprows=2, usecols=[1,2,3], unpack=True)
-box = [340,340,340]
+x,y,z=np.loadtxt("liquid.xyz", skiprows=2, usecols=[1,2,3], unpack=True)
+# box = [340,340,340]
+box = [12.6992,12.6992,12.6992] #LJfcc
+box = [13.4061,13.4061,13.4061] #LJliquid
 # Choose the parameters well:
 # the number of bins is critical: the more the better the integral... (but this slows the code down a lot)
 # the sigma fo the mollifying gaussians needs to be small, around 5-10% of the diameter
@@ -171,7 +174,10 @@ box = [340,340,340]
 # - rcut  defines the range of the mollified gr 
 # - neighcut is the maximum distance for two neighboring particles
 
-diameter =19
-s2,locals2 = local_s2 (x, y, z, box, 0.05*diameter, 1.4*diameter,rcut=3*diameter,nbins=60) 
-
-save_xyzsl("colored.xyzsl", x, y, z, s2,locals2)
+diameter =1.
+s2,locals2 = local_s2 (x, y, z, box, 0.1*diameter, 1.4*diameter,rcut=3*diameter,nbins=60) 
+# import pylab as pl
+print (np.mean(s2))
+# pl.hist(s2)
+# pl.show()
+# save_xyzsl("colored_1.xyzsl", x, y, z, s2,locals2)
