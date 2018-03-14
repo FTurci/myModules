@@ -1,7 +1,8 @@
-from __future__ import division
+from __future__ import division, print_function
 import numpy as np
 import ctypes
 import tqdm 
+import pylab as pl
 
 mollib = ctypes.cdll['./mollified.so']
 c_double_p = ctypes.POINTER(ctypes.c_double)
@@ -112,7 +113,7 @@ def s2(x,y,z,box,stdev,rcut=None, nbins=200):
 
 
 
-def local_s2(x,y,z,box,stdev,neighcut,rcut=None,nbins=200,epsilon=1e-8):
+def local_s2(x,y,z,box,stdev,neighcut,rcut=None,nbins=200,epsilon=1e-10):
 	"""
 	Compute s2 and its local average within a sphere of size neighcut.
 	"""
@@ -135,14 +136,17 @@ def local_s2(x,y,z,box,stdev,neighcut,rcut=None,nbins=200,epsilon=1e-8):
 		# print (gi.max(),gi.min())
 		# gi =np.ones(len(gi))
 		# print
-		integrand = (gi*np.log(gi)-gi+1.0)
+		integrand = (gi*np.log(gi)-gi+1.0)*ri**2
+		
 		# print integrand
-		# integrand[gi<epsilon]=0
+		integrand[gi<epsilon]=0
+		if i<3:
+			pl.plot(integrand)
 		# s2[i] = -2*np.pi *rho*simps(integrand,ri)
 		s2[i] = -2.*np.pi *rho*np.trapz(integrand,ri)
 		# print np.trapz(integrand,ri
 	# compute the local average
-
+	pl.show()
 	compute_local_average = mollib['local_average']
 
 	compute_local_average(
@@ -165,12 +169,6 @@ def save_xyzsl(filename,x,y,z,s,slocal):
 			fw.write("A %g %g %g %g %g\n"%(x[i],y[i],z[i], s[i], slocal[i]))
 
 # EXAMPLE:
-
-x,y,z=np.loadtxt("liquid.xyz", skiprows=2, usecols=[1,2,3], unpack=True)
-# box = [340,340,340]
-box = [12.6992,12.6992,12.6992] #LJfcc
-box = [13.4061,13.4061,13.4061] #LJliquid
-
 # Choose the parameters well:
 # the number of bins is critical: the more the better the integral... (but this slows the code down a lot)
 # the sigma fo the mollifying gaussians needs to be small, around 5-10% of the diameter
@@ -178,8 +176,23 @@ box = [13.4061,13.4061,13.4061] #LJliquid
 # - rcut  defines the range of the mollified gr 
 # - neighcut is the maximum distance for two neighboring particles
 
+# LJFCC
+box = [13.1486,13.1486,13.1486] 
+x,y,z=np.loadtxt("fcc.xyz", skiprows=2, usecols=[1,2,3], unpack=True)
 diameter =1.
 s2,locals2 = local_s2 (x, y, z, box, 0.1*diameter, 1.4*diameter,rcut=3*diameter,nbins=60) 
-# import pylab as pl
-print (np.mean(s2))
+print ("FCC",np.mean(s2),np.mean(locals2))
+# LJ liquid
+x,y,z=np.loadtxt("liquid.xyz", skiprows=2, usecols=[1,2,3], unpack=True)
+box = [13.4061,13.4061,13.4061] 
+diameter =1.
+s2,locals2 = local_s2 (x, y, z, box, 0.1*diameter, 1.4*diameter,rcut=3*diameter,nbins=60) 
+print ("LIQ",np.mean(s2),np.mean(locals2))
+# LJ liquid
+x,y,z=np.loadtxt("centers020same_kernel_6_octaves_blur2_no_overlap_-0_radfix_14_8_3_16.xyz", skiprows=2, usecols=[1,2,3], unpack=True)
+box = [340.,340.,340.] 
+diameter =19.
+s2,locals2 = local_s2 (x, y, z, box, 0.1*diameter, 1.4*diameter,rcut=3*diameter,nbins=60) 
+print ("EXP",np.mean(s2),np.mean(locals2))
+
 
