@@ -134,10 +134,13 @@ def local_s2(x,y,z,box,stdev,neighcut,rcut=None,nbins=200,epsilon=1e-8):
 		ri, gi = mollified_radial_distribution(i, x, y, z, box, stdev,rcut=rcut,nbins=nbins)
 		# print (gi.max(),gi.min())
 		# gi =np.ones(len(gi))
-		integrand = (gi*np.log(gi)-gi+1)
-		integrand[gi<epsilon]=0
+		# print
+		integrand = (gi*np.log(gi)-gi+1.0)
+		# print integrand
+		# integrand[gi<epsilon]=0
 		# s2[i] = -2*np.pi *rho*simps(integrand,ri)
 		s2[i] = -2.*np.pi *rho*np.trapz(integrand,ri)
+		# print np.trapz(integrand,ri
 	# compute the local average
 
 	compute_local_average = mollib['local_average']
@@ -167,6 +170,7 @@ x,y,z=np.loadtxt("liquid.xyz", skiprows=2, usecols=[1,2,3], unpack=True)
 # box = [340,340,340]
 box = [12.6992,12.6992,12.6992] #LJfcc
 box = [13.4061,13.4061,13.4061] #LJliquid
+
 # Choose the parameters well:
 # the number of bins is critical: the more the better the integral... (but this slows the code down a lot)
 # the sigma fo the mollifying gaussians needs to be small, around 5-10% of the diameter
@@ -178,6 +182,4 @@ diameter =1.
 s2,locals2 = local_s2 (x, y, z, box, 0.1*diameter, 1.4*diameter,rcut=3*diameter,nbins=60) 
 # import pylab as pl
 print (np.mean(s2))
-# pl.hist(s2)
-# pl.show()
-# save_xyzsl("colored_1.xyzsl", x, y, z, s2,locals2)
+
