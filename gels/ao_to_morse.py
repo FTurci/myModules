@@ -66,7 +66,7 @@ def hertz_ao_potential(r, params=[1000,1.,1.,1.]):
 	p[rgood] = -np.pi*(2*Rg)**3*zp/6.*(1+q)**3/q**3*( 1.- 3*r[rgood]/(2*(1.+q)*sigma)+(r[rgood])**3/(2.*(1+q)**3*sigma**3) )
 
 
-	p[rhard] = A*(sigma - r[hard])**2.5+ min(p[rgood])
+	p[rhard] = A*(sigma - r[rhard])**2.5+ min(p[rgood])
 
 	return p
 
