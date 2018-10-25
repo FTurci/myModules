@@ -49,6 +49,7 @@ def ao_potential(r, params=[1.,1.,1]):
 	p[rgood] = -np.pi*(2*Rg)**3*zp/6.*(1+q)**3/q**3*( 1.- 3*r[rgood]/(2*(1.+q)*sigma)+(r[rgood])**3/(2.*(1+q)**3*sigma**3) )
 
 	return p
+
 def ao_contact( etap ,q):
 	return etap*(1.+3./2./q)
 def etap_from_ao_contact(u_ao,q):
@@ -118,15 +119,15 @@ def optimise_morse_epsilon_from_Uao(rho0, sigma, q,Uao,numepsilons=10000):
 		print ("AO reduced B2", reduced_B2_ao)
 		print ("Morse reduced B2",reduced_B2s_morse[pos] )
 		print ("Morse effective sigma ",effective_sigma(morse_cut, morse_params,beta) )
-		r = np.linspace(0.5,1.5,1000)
+		r = np.linspace(0.5,1.5,100000)
 		print ("Min AO", min(ao_potential(r,ao_p)))
 		print ("")
 	return optimised_epsilons
 
 def example():
 	# INPUT : 
-	q = 0.17
+	q = 0.25
 	rho0= 25.
 	sigma = 1.
-	Uao = [2.4, 4.] #well depths in kbT
+	Uao = [2.4] #well depths in kbT
 	optimise_morse_epsilon_from_Uao(rho0, sigma, q, Uao)
