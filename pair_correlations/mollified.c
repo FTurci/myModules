@@ -199,10 +199,11 @@ void s2 (double *s2,double *r,double* gr, double *x, double* y, double* z, doubl
 			// integrand[k]=0;
 			if (gr[i*nbins+k]<epsilon) integrand[k]=0;
 			else{
-				integrand[k] = gr[i*nbins+k]*log(gr[i*nbins+k])-gr[i*nbins+k]+1.;
+				integrand[k] = (gr[i*nbins+k]*log(gr[i*nbins+k])-gr[i*nbins+k]+1.)*r[k]*r[k];
 			}
 		}
 		s2[i] =-2.*M_PI *rho*trapz(integrand,r,nbins);
+		printf("%g\n",s2[i] );
 	}
 	free(integrand);
 	
