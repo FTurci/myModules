@@ -51,7 +51,7 @@ def ao_potential(r, params=[1.,1.,1]):
 	return p
 
 def hertz_ao_potential(r, params=[1000,1.,1.,1.]):
-	A, q, sigma,etap = pparams[0], params[1],params[2],params[3]
+	A, q, sigma,etap = params[0], params[1],params[2],params[3]
 
 	Rg = sigma*q/2.
 	# print ("Rg", Rg)
@@ -61,7 +61,7 @@ def hertz_ao_potential(r, params=[1000,1.,1.,1.]):
 	rgood = (r>sigma)*(r< (sigma+2*Rg))
 	
 	p = np.zeros(len(r))
-	
+
 
 	p[rgood] = -np.pi*(2*Rg)**3*zp/6.*(1+q)**3/q**3*( 1.- 3*r[rgood]/(2*(1.+q)*sigma)+(r[rgood])**3/(2.*(1+q)**3*sigma**3) )
 
