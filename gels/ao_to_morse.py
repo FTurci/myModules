@@ -76,7 +76,7 @@ def hertz_sigmoid_potential(r, params=[1000,1.,1.,1.]):
 
 	rhard = r<b
 	rrest = r>=b
-	p[rhard] = A*(b - r[rhard])**2.5 +  d *np.tanh(c*(r[hard]-b)) 
+	p[rhard] = A*(b - r[rhard])**2.5 +  d *np.tanh(c*(r[rhard]-b)) 
 
 	p[rrest] = d *np.tanh(c*(r[rrest]-b)) 
 
