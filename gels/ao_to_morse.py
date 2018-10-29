@@ -70,6 +70,21 @@ def hertz_ao_potential(r, params=[1000,1.,1.,1.]):
 
 	return p
 
+def hertz_sigmoid_potential(r, params=[1000,1.,1.,1.]):
+	A, b,c,d = params[0], params[1],params[2],params[3]
+	p = np.zeros(len(r))
+
+	rhard = r<b
+	rrest = r>=b
+	p[rhard] = A*(b - r[rhard])**2.5 +  d *np.tanh(c*(r[hard]-b)) 
+
+	p[rrest] = d *np.tanh(c*(r[rrest]-b)) 
+
+	return p
+
+
+
+
 def ao_contact( etap ,q):
 	return etap*(1.+3./2./q)
 def etap_from_ao_contact(u_ao,q):
