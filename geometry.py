@@ -10,7 +10,7 @@ reload(fileformats)
 def pbcpdist(xyz, N, box):
     values = np.zeros((N)*(N+1)/2)
     count = 0
-    hbox = np.arra(box)*0.5
+    hbox = np.array(box)*0.5
     for i in range(N-1):
         for j in range(i+1, N):
             d = 0
