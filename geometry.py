@@ -33,7 +33,7 @@ def pbcpdist(xyz, N, box):
 @jit(nopython=True)
 def get_neighs( dists,N, threshold, maxneighs= 30):
     neightable = np.zeros((N,maxneighs))
-    numneighs = np.zeros(N)
+    numneighs = np.zeros(N).astype(int)
     count = 0
     for i in range(N-1):
         for j in range(i, N):
