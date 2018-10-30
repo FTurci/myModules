@@ -8,13 +8,15 @@ reload(fileformats)
 
 @jit(nopython=True)
 def pbcpdist(xyz, N, box):
+    assert xyz.shape[0] == N, "Number of particles does not match the input xyz table."
+    assert xyz.shape[0] == len(box), "Mismatiching dimensions"
     values = np.zeros((N)*(N-1)/2)
     count = 0
     hbox = np.array(box)*0.5
     for i in range(N-1):
         for j in range(i+1, N):
             d = 0
-            for k in range(3):
+            for k in range(len(box)):
                 dx = xyz[i,k]-xyz[j,k]
                 if dx> hbox[k]:
                     dx -= box[k]
