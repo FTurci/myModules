@@ -23,7 +23,7 @@ def pbcpdist(xyz, N, box):
                 d += dx**2
 
             values [count] = np.sqrt(d)
-    return d
+    return values
 
 def rand_rotation_matrix3d(deflection=1.0, randnums=None):
     """
