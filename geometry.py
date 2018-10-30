@@ -7,7 +7,7 @@ from numba import autojit, jit
 reload(fileformats)
 
 @jit(nopython=True)
-def pbc_pdist(xyz, N, box):
+def pbcpdist(xyz, N, box):
     values = np.zeros((N)*(N+1)/2)
     count = 0
     hbox = np.arra(box)*0.5
@@ -18,7 +18,7 @@ def pbc_pdist(xyz, N, box):
                 dx = xyz[i,k]-xyz[j,k]
                 if dx> hbox[k]:
                     dx -= box[k]
-                elif dx <= -hbox[k]
+                elif dx <= -hbox[k]:
                     dx += box[k]
                 d += dx**2
 
