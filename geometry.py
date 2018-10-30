@@ -36,7 +36,7 @@ def get_neighs( dists,N, threshold, maxneighs= 30):
     numneighs = [0 for i in range(N)]
     count = 0
     for i in range(N-1):
-        for j in range(i, N):
+        for j in range(i+1, N):
             if dists[count]< threshold:
                 print i,j, count, dists[count]
                 neightable[numneighs[i]] = j
