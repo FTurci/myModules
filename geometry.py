@@ -29,6 +29,25 @@ def pbcpdist(xyz, N, box):
             count +=1
     return values
 
+
+@jit(nopython=True)
+def get_neighs( dists,N, threshold, maxneighs= 30):
+    neightable = np.zeros((N,maxneighs))
+    numneighs = np.zeros(N)
+    count = 0
+    for i in range(N-1):
+        for j in range(i, N):
+            if dists[count]< threshold:
+                neightable[numneighs[i]] = j
+                neightable[numneighs[j]] = i
+
+                numneighs[i] += 1
+                numneighs[j] +=1
+            count += 1
+
+    return neightable,numneighs
+
+
 def rand_rotation_matrix3d(deflection=1.0, randnums=None):
     """
     Creates a random rotation matrix.
