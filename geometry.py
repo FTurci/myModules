@@ -1,10 +1,29 @@
 import numpy as np
 import sys
 import fileformats 
+from scipy.spatial.distance import cdist
+from numba import autojit, jit
 
 reload(fileformats)
 
+@jit(nopython=True)
+def pbc_pdist(xyz, N, box):
+    values = np.zeros((N)*(N+1)/2)
+    count = 0
+    hbox = np.arra(box)*0.5
+    for i in range(N-1):
+        for j in range(i+1, N):
+            d = 0
+            for k in range(3):
+                dx = xyz[i,k]-xyz[j,k]
+                if dx> hbox[k]:
+                    dx -= box[k]
+                elif dx <= -hbox[k]
+                    dx += box[k]
+                d += dx**2
 
+            values [count] = np.sqrt(d)
+    return d
 
 def rand_rotation_matrix3d(deflection=1.0, randnums=None):
     """
@@ -153,7 +172,6 @@ def overlap(c1,c2, nrotations=100, a=0.3):
         qs.append(q)
     return np.max(qs),qs
 
-from scipy.spatial.distance import cdist
 
 
 def maximise_overlap(c1,c2, a):
@@ -418,7 +436,7 @@ def voronoi2dxy(xy,framenumber,maximumdistance,radii, save=True):
 
         return cells
 
-from numba import autojit, jit
+
 
 @autojit
 def similar(type_series, len_neighs, edges):
