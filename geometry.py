@@ -6,6 +6,16 @@ from numba import autojit, jit
 
 reload(fileformats)
 
+
+def dist(i,j,xyz,box):
+    d = xyz[j]-xyz[i]
+    for k in range(xyz.shape[1]):
+        if d[k]>box[k]*0.5:
+            d[k]-=box[k]
+        elif d[k]>-box[k]*0.5:
+            d[k]+=box[k]
+    return d
+
 @jit(nopython=True)
 def pbcpdist(xyz, N, box):
     assert xyz.shape[0] == N, "Number of particles does not match the input xyz table."
