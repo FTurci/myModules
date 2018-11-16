@@ -1,4 +1,16 @@
 import subprocess , os, inspect, glob
+
+
+def to_xyz(coords, filename="tmp.xyz", types= None, mode="a"):
+  N = coords.shape[0]
+  if types ==None:
+    types = ["A" for i in range(N)]
+  with open(filename, mode) as fout:
+    fout.write("%d\nAtoms\n"%N)
+    for i in range(N):
+      fout.write("%s %g %g %g \n"%(types[i], coords[i,0], coords[i,1],coords[i,2]))
+      
+
 def inputparameters(xyzFileName,boxType,desiredFrames,totalFrames, N,Na,rho, rcut,fc,boxName="box.txt", startFrom=0, frequency=1,bondType=1,pbc=True,bonds=False,clust=False, raw=False,_11a=False, _13a=False, pop=True):
 	if len(rcut)>1:
 		replacement=(boxType, boxName,xyzFileName, desiredFrames,totalFrames,N,Na, rho, totalFrames,startFrom,frequency,rcut[0], rcut[1], rcut[2],bondType, pbc,fc,bonds,clust,raw,_11a,_13a,pop)

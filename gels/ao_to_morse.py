@@ -16,7 +16,9 @@ def effective_sigma(potential,params, beta,rmax=20.0, npoints=10000):
 	p = potential(r, params=params)
 	repulsive  = np.zeros(len(r))
 	repulsive [p>0] = p[p>0]
-
+  
+  repulsive 
+  
 	y = 1.-np.exp(-beta*repulsive)
 	I = simps(y,r)
 	return I
@@ -66,7 +68,7 @@ def hertz_ao_potential(r, params=[1000,1.,1.,1.]):
 	p[rgood] = -np.pi*(2*Rg)**3*zp/6.*(1+q)**3/q**3*( 1.- 3*r[rgood]/(2*(1.+q)*sigma)+(r[rgood])**3/(2.*(1+q)**3*sigma**3) )
 
 
-	p[rhard] = A*(sigma - r[rhard])**2.5+ min(p[rgood])
+	p[rhard] = A*(sigma - r[rhard])**2.5- min(p[rgood])
 
 	return p
 
@@ -79,6 +81,10 @@ def hertz_sigmoid_potential(r, params=[1000,1.,1.,1.]):
 	p[rhard] = A*(b - r[rhard])**2.5 +  d *np.tanh(c*(r[rhard]-b)) 
 
 	p[rrest] = d *np.tanh(c*(r[rrest]-b)) 
+
+  #remove cutoff
+	p -=  d *np.tanh(c*(r[-1]-b)) 
+
 
 	return p
 
