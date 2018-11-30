@@ -1,6 +1,7 @@
 from __future__ import print_function
 import numpy as np
 import pickle
+import os
 
 def find_nearest(array,value):
     idx = (np.abs(array-value)).argmin()
@@ -11,7 +12,8 @@ def find_nearest_index(array,value):
     return idx
 
 def decompress(filename,mode='rb',delete=False):
-  import gzip 
+  import gzip
+  filename = os.path.abspath(filename)
   if filename[-3:]==".gz":
     with gzip.open(filename, mode) as fin:
       data = fin.read()
