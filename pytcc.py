@@ -11,71 +11,45 @@ def to_xyz(coords, filename="tmp.xyz", types= None, mode="a"):
       fout.write("%s %g %g %g \n"%(types[i], coords[i,0], coords[i,1],coords[i,2]))
       
 
-def inputparameters(xyzFileName,boxType,desiredFrames,totalFrames, N,Na,rho, rcut,fc,boxName="box.txt", startFrom=0, frequency=1,bondType=1,pbc=True,bonds=False,clust=False, raw=False,_11a=False, _13a=False, pop=True):
+def inputparameters(xyzFileName, frames, frequency,boxType=1, boxName="box.txt", rcut=2.0,min_cutAA=0.0,bondType=1, pbc=True,fc=0.82,num_bonds=50,cell_list=False,all_clust=True,write_bonds=False,write_clusts=False,write_raw=False,write_xyz=False,write_pop=True):
 	if len(rcut)>1:
-		replacement=(boxType, boxName,xyzFileName, desiredFrames,totalFrames,N,Na, rho, totalFrames,startFrom,frequency,rcut[0], rcut[1], rcut[2],bondType, pbc,fc,bonds,clust,raw,_11a,_13a,pop)
+		replacement=(boxType, boxName,xyzFileName, frames, frequency, rcut[0], rcut[1], rcut[2],min_cutAA,bondType, pbc,fc,num_bonds,cell_list,all_clust,write_bonds,write_clusts,write_raw,write_xyz,write_pop)
 	else:
-		replacement=(boxType, boxName,xyzFileName, desiredFrames,totalFrames,N,Na, rho, totalFrames,startFrom,frequency,rcut[0], rcut[0], rcut[0],bondType, pbc,fc,bonds,clust,raw,_11a,_13a,pop)
+		replacement=(boxType, boxName,xyzFileName, frames, frequency, rcut[0], rcut[0], rcut[0],min_cutAA,bondType, pbc,fc,num_bonds,cell_list,all_clust,write_bonds,write_clusts,write_raw,write_xyz,write_pop)
  
-	script="""[Box]	
+	script="""[[Box]
 ; Specifies how to read simulation box
-box_type			= %d				; 0 if cubic NVT, 1 if system non-cubic NVT, 2 if system is NPT, 3 triclinc with tilt (INTEGER)
-box_name			= %s		; name of parameters file for box size (STRING)
+box_type      = %d       ; 1 if NVT, 2 if NPT, 3 if triclinc with tilt
+box_name      = %s   ; name of parameters file for box size
 
-[Run]	
+[Run]
 ; Run specific settings - these depend on your xyz file
-xyzfilename			= %s		; File name of the xyz file to be analysed. (STRING)
-frames				= %d				; FRAMES - frames to read from input xmol file (INTEGER)
-totalframes			= %d
-num_particles		= %d			; Total number of particles. (INTEGER)
-numA_particles		= %d			; Number of type A particles (same as num particles if not binary) (INTEGER)
-number_density		= %g			; Number of particles per unit volume (DOUBLE)
-simulationstarttime = 0				; These values have no effect on the simulatin, they only serve to label the frames in the output files. (DOUBLE)
-simulationtimestep	= 1			; These values have no effect on the simulation, they only serve to label the frames in the output files.(DOUBLE)
-simulationendtime	= %d				; These values have no effect on the simulation, they only serve to label the frames in the output files.(DOUBLE)
-start_from			= %d				; start reading from this frame in the xmol file (INTEGER)
-sample_freqency		= %d				; frequency at which to take frames from the xmol file (INTEGER)
+xyzfilename     = %s ; File name of the xyz file to be analysed.
+frames        = %d      ; Frames to process
+sample_freqency   = %d       ; frequency at which to take frames from the xmol file
 
-[Simulation]	
+[Simulation]
 ; Simulation specific settings - these depend on the type of system you are analysing
-rcutAA				= %g	; A-A bond lengths (for simple bond detection) (DOUBLE)
-rcutAB				= %g	; A-B bond lengths (for simple bond detection) (DOUBLE)
-rcutBB				= %g	; B-B bond lengths (for simple bond detection) (DOUBLE)
-bond_type			= %d		; 0 simple bond length, 1 Voronoi bond detection (BINARY INTEGER)
-PBCs				= %d     ; 0 off, 1 on, Use period boundary conditions (BINARY INTEGER)
-voronoi_parameter	= %g  ; Modified Voronoi Fc parameter (DOUBLE from 0 to 1)
-num_bonds			= 30	; max number of bonds to one particle (INTEGER)
-cell_list			= 0		; use Cell List to calculate bond network (and potential if used as well) (BINARY INTEGER)
-potential_type		= 0		; 0 BLJ, 1 SFBLJ, 2 MorYuk: polydisp morse+yukawa, 3 not used, 4 IPL, 5 BLJ_WCAs, 6 SFIPL, 7 CRVT (INTEGER)
+rcutAA        = %f ; maximum A-A bond lengths  // The cutoff is always applied whether Voronoi bonds are used or not
+rcutAB        = %f ; maximum A-B bond lengths
+rcutBB        = %f ; maximum B-B bond lengths
+min_cutAA           = %f   ; minimum A-A bond length. Good for excluding overlapping particles in ideal gases.
+bond_type     = %d   ; 0 simple bond length, 1 Voronoi bond detection
+PBCs        = %d     ; 0 Dont use periodic boundary conditions, 1 Use PBCs,
+voronoi_parameter = %g   ; Modified Voronoi Fc parameter
+num_bonds     = %d  ; max number of bonds to one particle
+cell_list     =  %d  ; use Cell List to calculate bond network
+analyse_all_clusters = %d    ; If set to zero, read clusters to analyse from clusters_to_analyse.ini
 
-[Output]		
+[Output]
 ; Determines what the TCC will output
-bonds 				= %d		; write out bonds file (BINARY INTEGER)
-clusts 				= %d		; write clusts_** files containing all clusters - USES LOTS OF HDD SPACE (BINARY INTEGER)
-raw 				= %d		; write raw_** xmol cluster files (BINARY INTEGER)
-11a 				= %d		; write centres of 11A (BINARY INTEGER)
-13a 				= %d		; write centres of 13A (BINARY INTEGER)
-pop_per_frame 		= %d		; write particle fraction of each cluster per frame (BINARY INTEGER)
-bin_width 			= 0.02	; bin width for bond length distributions (double)
-bond_length 		= 0		; write bond length distributions (BINARY INTEGER)
-bond_length_cluster	= 0		; write bond length distributions for each cluster type (BINARY INTEGER)
-bond_length_dev 	= 0		; write bond length deviations from ground.state.bondlengths.dat for each cluster type (BINARY INTEGER)
-neighbour_dist 		= 0		; write number of neighbour distributions  (BINARY INTEGER)
-bonded_dist 		= 0		; write distributions for the number of particles bonded to the centre of each cluster (BINARY INTEGER)
-cluster_composition	= 0		; write compositions of each cluster in terms of A and B species (BINARY INTEGER)
-subclusters			= 0		; write subclusters of each cluster, if dynamics also done on required subcluster (BINARY INTEGER)
-
-[Extra]		
-; Special settings for extra functions
-potential_energy 	= 0    ; do potential energy calculations (BINARY INTEGER)
-coslovich			= 0    ; do Coslovich-style Voronoi faces analysis (BINARY INTEGER)
-dodynamics			= 0    ; do Dynamics Analysis - choose which clusters and set memory sizes in static.memsize.dat (BINARY INTEGER)
-alpha_time 			= 1.0  ; alpha relaxtion time (in simulation time units)(DOUBLE)
-debug 				= 1    ; printing running (per frame) debug information (BINARY INTEGER)
-shear				= 0    ; shear amount (for Lees-Edwards BCs) (DOUBLE)
-
-; Potential parameters are in potentialparams.in
-"""%replacement
+bonds         = %d   ; write out bonds file
+clusts        = %d   ; write clusts_** files containing all clusters - USES LOTS OF HDD SPACE
+raw         = %d   ; write raw_** xmol cluster files
+do_XYZ              = %d     ; write clusters to xyz files
+11a         = 0   ; write centres of 11A
+13a         = 0   ; write centres of 13A
+pop_per_frame     = %d   ; write particle fraction of each cluster per frame"""%replacement
 	with open('inputparameters.ini', 'w') as fw:
 		fw.write(script)
 	
