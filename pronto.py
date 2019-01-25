@@ -25,3 +25,7 @@ def decompress(filename,mode='rb',delete=False):
 def clean(filename,extension = ".decompressed"):
   import os
   os.system("rm "+filename+extension)
+
+def cast_to_array(a):
+  b = tuple([np.array(i) for i in a])
+  return b
