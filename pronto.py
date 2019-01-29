@@ -15,13 +15,13 @@ def decompress(filename,mode='rb',delete=False):
   import gzip
   filename = os.path.abspath(filename)
   if filename[-3:]==".gz":
-    with gzip.open(filename, mode) as fin:
-      data = fin.read()
-      filenameout = filename+".decompressed"
-      if os.path.isfile(filenameout):
+    filenameout = filename+".decompressed"
+    if os.path.isfile(filenameout):
         print("!!! Skipping decompression: file already exists.")
         return filenameout
-      else:
+    else:
+      with gzip.open(filename, mode) as fin:
+        data = fin.read()
         with open(filenameout ,'wb') as fout:
           fout.write(data)
         return filenameout
