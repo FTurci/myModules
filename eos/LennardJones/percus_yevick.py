@@ -1,3 +1,4 @@
+# Twitter @Francesco_Turci
 
 import numpy as np
 import scipy.integrate as integrate
@@ -123,8 +124,7 @@ class PercusYevickEOS(object):
 		First the binodal is estimated in a wide range of temperatures. Then, a spline is used to fit the relation T(rho) and return the estimate for T at the given rho.
 		"""
 		T = first_max_temperature
-
-		warnings.filterwarnings('error')
+		
 		while True:
 			T *= 1.05 #5 percent increment to quickly climb  up
 			try:
