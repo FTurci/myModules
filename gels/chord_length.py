@@ -37,16 +37,19 @@ class ChordLengthAnalyser(object):
       lengths.append( get_length(self.data,pbc=self.pbc,warning=warning))
       self.lengths = np.concatenate(lengths)
     if self.ndim==2:
+      lengthx=[]
+      lengthy=[]
       for i in range(self.shape[0]):
         l=get_length(self.data[i,:],pbc=self.pbc,warning=warning)
-        lengths.append(l)
+        lengthx.append(l)
       for j in range(self.shape[1]):
-        lengths.append(get_length(self.data[:,j],pbc=self.pbc,warning=warning))
-      lengths=np.concatenate(lengths)
+        lengthy.append(get_length(self.data[:,j],pbc=self.pbc,warning=warning))
+      self.lengthx=np.concatenate(lengthx)
+      self.lengthy=np.concatenate(lengthy)
       if remove_zeros:
-        self.lengths=lengths[lengths>0]
+        self.lengths=np.concatenate((lengthx[lengthx>0],lengthy[lengthy>0]))
       else:
-        self.lengths=lengths
+        self.lengths=np.concatenate((lengthx,lengthy))
 
     if self.ndim == 3:
       #along x
@@ -65,9 +68,9 @@ class ChordLengthAnalyser(object):
         for j in range(self.shape[1]):
           lengthz.append(get_length(self.data[i,j,:],pbc=self.pbc,warning=warning))
 
-      lengthx=np.concatenate(lengthx)
-      lengthy=np.concatenate(lengthy)
-      lengthz=np.concatenate(lengthz)
+      self.lengthx=np.concatenate(lengthx)
+      self.lengthy=np.concatenate(lengthy)
+      self.lengthz=np.concatenate(lengthz)
       if remove_zeros:
         self.lengths=[l[l>0] for l in [lengthx,lengthy,lengthz]]
       else:
