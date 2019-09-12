@@ -47,9 +47,9 @@ class ChordLengthAnalyser(object):
       self.lengthx=np.concatenate(lengthx)
       self.lengthy=np.concatenate(lengthy)
       if remove_zeros:
-        self.lengths=np.concatenate((self.lengthx[lengthx>0],self.lengthy[lengthy>0]))
-      else:
-        self.lengths=np.concatenate((self.lengthx,self.lengthy))
+          self.lengths=[l[l>0] for l in [self.lengthx,self.lengthy,self.lengthz]]
+        else:
+          self.lengths=[l for l in [self.lengthx,self.lengthy,self.lengthz]]
 
     if self.ndim == 3:
       #along x
