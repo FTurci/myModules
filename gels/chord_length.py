@@ -46,10 +46,11 @@ class ChordLengthAnalyser(object):
         lengthy.append(get_length(self.data[:,j],pbc=self.pbc,warning=warning))
       self.lengthx=np.concatenate(lengthx)
       self.lengthy=np.concatenate(lengthy)
+
       if remove_zeros:
-          self.lengths=[l[l>0] for l in [self.lengthx,self.lengthy,self.lengthz]]
-        else:
-          self.lengths=[l for l in [self.lengthx,self.lengthy,self.lengthz]]
+        self.lengths=[l[l>0] for l in [self.lengthx,self.lengthy]]
+      else:
+        self.lengths=[l for l in [self.lengthx,self.lengthy]]
 
     if self.ndim == 3:
       #along x
