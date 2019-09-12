@@ -1,21 +1,39 @@
-from __future__ import print_function
-import numpy as np
+import numpy as np 
+from chord_length import ChordLengthAnalyser
 
-def get_length(a,warnings=False):
-  dif = np.ediff1d(a, to_begin=a[0]-a[-1])
-  dif = np.ediff1d(a, to_end=a[0]-a[-1])
-  idx = np.arange(len(a))
+print("\n# One dimensional example\n")
+a= np.random.randint(0,2,size=10)
 
-  end=idx[dif==-1]
-  begin=idx[dif==1]
-  if len(end)==0:
-    print ("    ! Warning: no gap found")
-    return [len(a)]
+print("The input matrix is")
+print(a)
+cl = ChordLengthAnalyser(a)
+cl.compute(warning=False)
 
-  if end[0]<begin[0]:
-    end = np.roll(end, -1)
-    chords = end-begin
-    chords[-1] = len(a)-begin[-1]+end[-1]
-    return chords
-  else:
-    return end-begin
+print("\nThe chord lengths are")
+print(cl.lengths)
+
+print("\n# Two dimensional example\n")
+a= np.zeros((5,5))
+a[1:3]=1
+
+print("The input matrix is")
+print(a)
+cl = ChordLengthAnalyser(a)
+cl.compute(warning=False)
+
+print("\nThe chord lengths are")
+print(cl.lengths)
+
+
+print("\n# Three dimensional example\n")
+a= np.zeros((5,5,5))
+a[1:3]=1
+a[3,0,0]=1 #add a bit to see if it is picked up
+
+print("The input matrix is")
+print(a)
+cl = ChordLengthAnalyser(a)
+cl.compute(warning=False)
+
+print("\nThe chord lengths are")
+print(cl.lengths)

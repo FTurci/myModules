@@ -117,7 +117,7 @@ def s2(x,y,z,box,stdev,rcut=None, nbins=200):
 
 
 
-def local_s2(x,y,z,box,stdev,neighcut,rcut=None,nbins=200,epsilon=1e-10):
+def local_s2(x,y,z,box,stdev,neighcut,rcut=None,nbins=200,epsilon=1e-10,plot=True):
 	"""
 	Compute s2 and its local average within a sphere of size neighcut.
 	"""
@@ -144,13 +144,16 @@ def local_s2(x,y,z,box,stdev,neighcut,rcut=None,nbins=200,epsilon=1e-10):
 		
 		# print integrand
 		integrand[gi<epsilon]=0
-		if i<3:
+		if i<3 and plot:
+			# pass
 			pl.plot(integrand)
+			pl.title("Checking the integrand for s2")
 		# s2[i] = -2*np.pi *rho*simps(integrand,ri)
 		s2[i] = -2.*np.pi *rho*np.trapz(integrand,ri)
 		# print np.trapz(integrand,ri
 	# compute the local average
-	pl.show()
+	if plot:
+		pl.show()
 	compute_local_average = mollib['local_average']
 
 	compute_local_average(
