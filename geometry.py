@@ -4,15 +4,13 @@ import fileformats
 from scipy.spatial.distance import cdist
 from numba import autojit, jit
 
-reload(fileformats)
-
-
+#reload(fileformats)
 def dist(i,j,xyz,box):
     d = xyz[j]-xyz[i]
     for k in range(xyz.shape[1]):
         if d[k]>box[k]*0.5:
             d[k]-=box[k]
-        elif d[k]>-box[k]*0.5:
+        elif d[k]< -box[k]*0.5:
             d[k]+=box[k]
     return d
 
@@ -21,7 +19,7 @@ def pbcpdist(xyz, N, box):
     assert xyz.shape[0] == N, "Number of particles does not match the input xyz table."
     assert xyz.shape[1] == len(box), "Mismatching dimensions."
 
-    values = np.zeros((N)*(N-1)/2)
+    values = np.zeros((N)*int((N-1)/2))
     count = 0
     hbox = box*0.5
     for i in range(N-1):
@@ -136,7 +134,7 @@ def spherical_subsamples(coords, minedge=[0,0,0],maxedge=[1.,1.,1.], divisions=[
         centers=np.array([c[0].flatten(), c[1].flatten(),c[2].flatten()]).T
 
     distances=cdist(coords, centers)
-    print "Radius",R
+    print ("Radius",R)
     ids[np.logical_not(np.any(distances<R,axis=1))]=-1
     
     samples=[]
@@ -222,7 +220,7 @@ def maximise_overlap(c1,c2, a):
     q=findQ(B, (R*A.T+t).T, a)
     if q>qmax:
             qmax=q
-    print "    q", qmax
+    print ("    q", qmax)
     if qmax==0 :
         import sys
         fileformats.array_to_xyz(c1, "A.xyz")
@@ -234,7 +232,7 @@ def ensemble_overlap_constant_N(samples,nrotations=100,diameter=1, overlap_scale
     qs=[]
     for i in xrange(len(samples)-1):
         for j in xrange(i+1,len(samples)):
-            print "===>",i,j
+            print ("===>",i,j)
             # identify particles in sphere i and sphere j
             c1,c2=samples[i],samples[j]
             q=maximise_overlap(c1, c2,overlap_scale*diameter )
@@ -251,7 +249,7 @@ def ensemble_overlap(samples,nrotations=100,diameter=1, overlap_scale=0.3):
             # identify particles in sphere i and sphere j
             c1,c2=samples[i],samples[j]
             q,qqs=overlap(c1, c2,nrotations=nrotations,a=overlap_scale*diameter )
-            print "==>",i,j,q
+            print ("==>",i,j,q)
             qs.append(q)
     return np.array(qs)
 
@@ -367,11 +365,11 @@ def gyration_tensor(_r, Print=False):
     c=L[1]-L[0]
     k2=(b**2+(3./4.)*c**2)/Rg**4
     if Print:
-        print "eigenvalues ",L
-        print "Radius of gyration ",Rg
-        print "asphericity ",b
-        print "acilindricity ",c
-        print "relative shape anisotropy ",k2
+        print ("eigenvalues ",L)
+        print ("Radius of gyration ",Rg)
+        print ("asphericity ",b)
+        print ("acilindricity ",c)
+        print ("relative shape anisotropy ",k2)
     return r_cm,V,LL,Rg,b,c,k2
 
 def matrix_to_quaternions(M):
@@ -421,7 +419,7 @@ def voronoi2d(Frame,maximumdistance,radii, save=True):
     import shelve
 
     if os.path.isfile(shelveName):
-        print "File", shelveName, "already exists"
+        print ("File", shelveName, "already exists")
         d=shelve.open(shelveName)
         return d['cells']
     else:
@@ -441,7 +439,7 @@ def voronoi2dxy(xy,framenumber,maximumdistance,radii, save=True):
     import shelve
 
     if os.path.isfile(shelveName):
-        print "File", shelveName, "already exists"
+        print ("File", shelveName, "already exists")
         d=shelve.open(shelveName)
         return d['cells']
     else:
@@ -457,9 +455,9 @@ def voronoi2dxy(xy,framenumber,maximumdistance,radii, save=True):
       
         try:
             cells=pyvoro.compute_2d_voronoi(coords,bounds,maximumdistance, periodic=[False,False], radii=radii, z_height=200)
-        except Exception, e:
-            print "Exception:",e
-            print "Attempting Reduced Radii Voronoi"
+        except Exception as e:
+            print ("Exception:",e)
+            print ("Attempting Reduced Radii Voronoi")
             cells=pyvoro.compute_2d_voronoi(coords,bounds,maximumdistance, periodic=[False,False], radii=radii*0.9, z_height=200)
         # if save:
             

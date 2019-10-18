@@ -15,7 +15,7 @@ class frame:
             if type(table[0,0])==str:
                 self.types=table[:,0]
             else:
-                print table[0,0],type(table[0,0])
+                print (table[0,0],type(table[0,0]))
                 self.types=table[:,0].astype(int)
             self.r=table[:,1:].astype(float)
         
@@ -24,7 +24,6 @@ class frame:
         if boxinfo is not None:
             self.boxinfo=np.array(boxinfo)
         else:
-            print "here"
             self.boxinfo=np.array([
         np.array(self.r[:,0].min(),self.r[:,0].max()),
         np.array(self.r[:,1].min(),self.r[:,1].max()),
@@ -37,14 +36,14 @@ class trajectory:
     def __init__(self,filename,compression=None, format='atom', numframes='all',ensemble='NVT', every=1, startframe=0):
     # guess format
         if filename[-4:]=='.xyz':
-            print "Identified .xyz file"
+            print ("Identified .xyz file")
             format='xyz'
         if filename[-5:]=='.atom':
-            print "Identified .atom file"
+            print ("Identified .atom file")
             format="atom"
 
         if format=='atom':
-            print "Assuming format: atom"
+            print ("Assuming format: atom")
             if compression is None:
                 filehandle=open(filename, 'r')
             elif compression in 'gz':
@@ -138,11 +137,11 @@ def read_lammps_atom_frame(filehandle):
     buf=filehandle.readline() #ITEM: TIMESTEP
     if(len(buf)>0): 
         pass
-        print "Reading",buf
+        print ("Reading",buf)
     else:
         return False,False
     timeframe=int(filehandle.readline())
-    print timeframe
+    print ("Timeframe",timeframe)
     buf=filehandle.readline()#ITEM: NUMBER OF ATOMS
     N=int(filehandle.readline())
     buf=filehandle.readline()#ITEM: BOX BOUNDS pp pp pp
