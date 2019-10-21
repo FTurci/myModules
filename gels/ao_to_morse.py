@@ -1,7 +1,7 @@
 from __future__ import print_function
 import numpy as np
 def reduced_second_virial(B2, sigma_eff):
-  return B2/(2./3.*np.pi*sigma_eff**2)
+  return B2/(2./3.*np.pi*sigma_eff**3)
 
 def second_virial(potential,params, beta,rmax=20.0, npoints=10000):
   from scipy.integrate import simps
@@ -14,6 +14,7 @@ def effective_sigma(potential,params, beta,rmax=20.0, npoints=10000):
   from scipy.integrate import simps
   r = np.linspace(0,rmax,npoints)
   p = potential(r, params=params)
+  # see Barker JA, Henderson D. Perturbation theory and equation of state for fluids. II. A successful theory of liquids. J Chem Phys. 1967;47:4714–4721.
   repulsive  = np.zeros(len(r))
   repulsive [p>0] = p[p>0]
    

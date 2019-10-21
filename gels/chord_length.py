@@ -23,6 +23,8 @@ def get_length(a,warning=False, pbc=True):
     else:
       return end-begin
   else:
+    # for ii,jj in zip(begin,end):
+      # print(a[ii-1:jj+1], dif[ii],dif[jj],ii,jj,len(a))
     return end-begin
 
 class ChordLengthAnalyser(object):
