@@ -55,3 +55,8 @@ def clean(filename,extension = ".decompressed"):
 def cast_to_array(a):
   b = tuple([np.array(i) for i in a])
   return b
+
+
+def grep(command):
+  import subprocess
+  return subprocess.call(['/bin/grep', command])

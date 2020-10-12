@@ -342,7 +342,7 @@ def rigid_transform_3D(A, B):
 
 
 def gyration_tensor(_r, Print=False):
-    from scipy.linalg import eig
+    from numpy.linalg import eig
     import sys 
     N=_r.shape[0]
     # centre of mass
