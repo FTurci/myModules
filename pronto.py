@@ -59,4 +59,4 @@ def cast_to_array(a):
 
 def grep(command):
   import subprocess
-  return subprocess.call(['/bin/grep', command])
+  return subprocess.call(['/bin/grep', command], shell=True)
