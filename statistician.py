@@ -3,6 +3,7 @@
 import numpy as np
 from scipy.optimize import curve_fit
 from scipy.stats.distributions import  t
+from scipy.stats import binned_statistic
 
 def confidenceFit(func,x,y, initial_guess, alpha=0.1,maxfev=800):
 
@@ -25,3 +26,15 @@ def confidenceFit(func,x,y, initial_guess, alpha=0.1,maxfev=800):
 
 	return pars,lower_bound,upper_bound,sigma,tval
 	
+
+
+def binned_cloud(x,y, bins=None):
+	if bins==None:
+		bins = np.unique(x)
+		bins = np.append(bins, 2*bins[-1]-bins[-2])
+	bs, be, bn= binned_statistic(x,y,bins= bins, statistic="mean")
+	std, be, bn= binned_statistic(x,y,bins= bins, statistic="std")
+	count, be, bn = binned_statistic(x,y,bins= bins, statistic="count")
+
+	er = std/np.sqrt(count)
+	return be[:-1],bs,er

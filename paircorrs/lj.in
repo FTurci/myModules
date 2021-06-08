@@ -23,12 +23,9 @@ thermo 1000
 
 timestep 0.01
 
-dump MYDUMP all atom 1000 dump.lammpstrj
+dump MYDUMP all atom 5000 dump.lammpstrj
 dump_modify MYDUMP sort id
 
 
-run		10000
+run		100000
 
-dump XYZDUMP all xyz 1 fcc.xyz
-dump_modify XYZDUMP sort id 
-run  0
