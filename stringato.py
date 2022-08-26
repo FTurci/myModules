@@ -11,7 +11,7 @@ def num_word(word,words):
     # try float
     floats = re.compile(f'{word}'+'(\d+\.\d+)').findall(words)
     print(word, floats)
-    if len(floats[0])==0:
+    if len(floats)==0:
         ints = re.compile(f'{word}'+'(\d+)').findall(words)
         return int(ints[0])
     else:
