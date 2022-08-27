@@ -4,7 +4,7 @@ def extract_floats(string):
 
 def stampa(*args,symbol=":::",**kwargs):
     """Overloads print  function with a prepended symbol."""
-    print(symbol,*args,**kwargs)
+    print(symbol,*args,**opts)
 
 
 def num_word(word,words, verbose=False):
