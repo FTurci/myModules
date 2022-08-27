@@ -2,9 +2,15 @@ import re
 def extract_floats(string):
     return re.findall(r"[-+]?\d*\.\d+|\d+", string)
 
-def stampa(*args,symbol=":::",**kwargs):
+def stampa(*args,symbol=None,**kwargs):
     """Overloads print  function with a prepended symbol."""
-    print(symbol,*args,**opts)
+    if symbol is None:
+        symbol = kwargs.get('s')
+        if symbol is None:
+            symbol = ":::"
+        else:
+            del kwargs['s']
+    print(symbol,*args,**kwargs)
 
 
 def num_word(word,words, verbose=False):
