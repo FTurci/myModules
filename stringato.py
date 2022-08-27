@@ -4,15 +4,12 @@ def extract_floats(string):
 
 def stampa(*args,symbol=None,**kwargs):
     """Overloads print  function with a prepended symbol."""
-<<<<<<< HEAD
     if symbol is None:
         symbol = kwargs.get('s')
         if symbol is None:
             symbol = ":::"
         else:
             del kwargs['s']
-=======
->>>>>>> e7eb6d7c2a17f2687c25a6db19e8c710b386a966
     print(symbol,*args,**kwargs)
 
 
