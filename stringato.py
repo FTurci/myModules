@@ -3,7 +3,7 @@ def extract_floats(string):
     return re.findall(r"[-+]?\d*\.\d+|\d+", string)
 
 def stampa(*args,symbol=":::",**kwargs):
-    """Overloads print  function with prependd symbol."""
+    """Overloads print  function with a prepended symbol."""
 	print(symbol,*args,**kwargs)
 
 
