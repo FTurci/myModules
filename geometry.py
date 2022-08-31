@@ -1,8 +1,8 @@
 import numpy as np
 import sys
-import fileformats 
+import fileformats
 from scipy.spatial.distance import cdist
-from numba import autojit, jit
+from numba import  jit
 
 #reload(fileformats)
 def dist(i,j,xyz,box):
@@ -59,42 +59,42 @@ def get_neighs( dists,N, threshold, maxneighs=30):
 def rand_rotation_matrix3d(deflection=1.0, randnums=None):
     """
     Creates a random rotation matrix.
-    
+
     deflection: the magnitude of the rotation. For 0, no rotation; for 1, competely random
     rotation. Small deflection => small perturbation.
     randnums: 3 random numbers in the range [0, 1]. If `None`, they will be auto-generated.
     """
     # from http://www.realtimerendering.com/resources/GraphicsGems/gemsiii/rand_rotation.c
-    
+
     if randnums is None:
         randnums = np.random.uniform(size=(3,))
-        
+
     theta, phi, z = randnums
-    
+
     theta = theta * 2.0*deflection*np.pi  # Rotation about the pole (Z).
     phi = phi * 2.0*np.pi  # For direction of pole deflection.
     z = z * 2.0*deflection  # For magnitude of pole deflection.
-    
+
     # Compute a vector V used for distributing points over the sphere
     # via the reflection I - V Transpose(V).  This formulation of V
     # will guarantee that if x[1] and x[2] are uniformly distributed,
     # the reflected points will be uniform on the sphere.  Note that V
     # has length sqrt(2) to eliminate the 2 in the Householder matrix.
-    
+
     r = np.sqrt(z)
     Vx, Vy, Vz = V = (
         np.sin(phi) * r,
         np.cos(phi) * r,
         np.sqrt(2.0 - z)
         )
-    
+
     st = np.sin(theta)
     ct = np.cos(theta)
-    
+
     R = np.array(((ct, st, 0), (-st, ct, 0), (0, 0, 1)))
-    
+
     # Construct the rotation matrix  ( V Transpose(V) - I ) R.
-    
+
     M = (np.outer(V, V) - np.eye(3)).dot(R)
     return M
 
@@ -123,11 +123,11 @@ def spherical_subsamples(coords, minedge=[0,0,0],maxedge=[1.,1.,1.], divisions=[
     """
     Isolates spherical subsamples of radius R located on a mesh from a set of particle coordinates. It returns an array of labels for each particle.
     """
-    
+
     dim=coords.shape[1]
     ids,c,digitized=digitize(coords, minedge,maxedge,divisions)
     from scipy.spatial.distance import cdist
-    
+
     if dim==2:
         centers=np.array([c[0].flatten(), c[1].flatten()]).T
     if dim==3:
@@ -136,7 +136,7 @@ def spherical_subsamples(coords, minedge=[0,0,0],maxedge=[1.,1.,1.], divisions=[
     distances=cdist(coords, centers)
     print ("Radius",R)
     ids[np.logical_not(np.any(distances<R,axis=1))]=-1
-    
+
     samples=[]
     for sample in xrange(int(np.prod(divisions))):
         c=coords[ids==sample]
@@ -245,7 +245,7 @@ def ensemble_overlap(samples,nrotations=100,diameter=1, overlap_scale=0.3):
     qs=[]
     for i in xrange(len(samples)-1):
         for j in xrange(i+1,len(samples)):
-            
+
             # identify particles in sphere i and sphere j
             c1,c2=samples[i],samples[j]
             q,qqs=overlap(c1, c2,nrotations=nrotations,a=overlap_scale*diameter )
@@ -255,7 +255,7 @@ def ensemble_overlap(samples,nrotations=100,diameter=1, overlap_scale=0.3):
 
 
 def random_overlaps2d(rho,a=0.3,L=100., nsamples=100):
-    N=int(L*L*rho)#unit surface 
+    N=int(L*L*rho)#unit surface
     from scipy.spatial.distance import cdist
     c0=np.random.uniform(0,L, size=(N,2))
     qs=[]
@@ -269,7 +269,7 @@ def random_overlaps2d(rho,a=0.3,L=100., nsamples=100):
     return qs, np.mean(qs), expected
 
 def get_lengths(xyzfile,L,rotations=100 , diameter=18., divide=np.arange(3,11,2)):
-    
+
     coords=np.loadtxt(xyzfile, skiprows=2, usecols=[1,2,3])
 
     qmeans=[]
@@ -281,7 +281,7 @@ def get_lengths(xyzfile,L,rotations=100 , diameter=18., divide=np.arange(3,11,2)
         samples=spherical_subsamples(coords, maxedge=[L,L,L],divisions=[division,division,division], R=L/division/2. )
         Q=ensemble_overlap(samples,nrotations=rotations,diameter=diameter)
         qmeans.append(Q.mean())
-    
+
 
     np.savetxt(xyzfile+".qmeans", zip(lengths/float(diameter),qmeans))
 
@@ -298,7 +298,7 @@ def get_lengths_random(phi,rotations=100 , diameter=18., divide=np.arange(3,11,2
         samples=spherical_subsamples(coords, maxedge=[L,L,L],divisions=[division,division,division], R=L/division/2. )
         Q=ensemble_overlap(samples,nrotations=rotations,diameter=diameter)
         qmeans.append(Q.mean())
-    
+
 
     np.savetxt("random_phi%g.qmeans"%phi, zip(lengths/float(diameter),qmeans))
     return zip(lengths/float(diameter),qmeans)
@@ -317,7 +317,7 @@ def rigid_transform_3D(A, B):
     # print N,"points"
     centroid_A = np.mean(A, axis=0)
     centroid_B = np.mean(B, axis=0)
-    
+
     # centre the points
     AA = A - np.tile(centroid_A, (N, 1))
     BB = B - np.tile(centroid_B, (N, 1))
@@ -343,7 +343,7 @@ def rigid_transform_3D(A, B):
 
 def gyration_tensor(_r, Print=False):
     from numpy.linalg import eig
-    import sys 
+    import sys
     N=_r.shape[0]
     # centre of mass
     r_cm=np.mean(_r,axis=0)
@@ -385,14 +385,14 @@ def matrix_to_quaternions(M):
         S = np.sqrt(1.0 + m[0,0] - m[1,1] - m[2,2]) * 2
         qw = (m[2,1] - m[1,2]) / S
         qx = 0.25 * S
-        qy = (m[0,1] + m[1,0]) / S 
-        qz = (m[0,2] + m[2,0]) / S 
-    elif (m[1,1] > m[2,2]) : 
+        qy = (m[0,1] + m[1,0]) / S
+        qz = (m[0,2] + m[2,0]) / S
+    elif (m[1,1] > m[2,2]) :
         S = np.sqrt(1.0 + m[1,1] - m[0,0] - m[2,2]) * 2
         qw = (m[0,2] - m[2,0]) / S
-        qx = (m[0,1] + m[1,0]) / S 
+        qx = (m[0,1] + m[1,0]) / S
         qy = 0.25 * S
-        qz = (m[1,2] + m[2,1]) / S   
+        qz = (m[1,2] + m[2,1]) / S
     else :
         S = np.sqrt(1.0 + m[2,2] - m[0,0] - m[1,1]) * 2
         qw = (m[1,0] - m[0,1]) / S
@@ -411,7 +411,7 @@ def radial_profile(data, center):
     tbin = np.bincount(r.ravel(), data.ravel())
     nr = np.bincount(r.ravel())
     radialprofile = tbin / nr
-    return radialprofile 
+    return radialprofile
 
 def voronoi2d(Frame,maximumdistance,radii, save=True):
     shelveName="frame%d.shelve"%Frame.timeframe
@@ -427,7 +427,7 @@ def voronoi2d(Frame,maximumdistance,radii, save=True):
         import pyvoro
         cells=pyvoro.compute_2d_voronoi(coords,Frame.boxinfo[:2],maximumdistance, periodic=[True,True], radii=radii)
         if save:
-            
+
             d=shelve.open(shelveName)
             d['cells']=cells
             d.close()
@@ -452,7 +452,7 @@ def voronoi2dxy(xy,framenumber,maximumdistance,radii, save=True):
         yhi=800#np.ceil(coords[:,0].max())+maximumdistance
         bounds=[[xlo,xhi], [ylo,yhi]]
         # print bounds
-      
+
         try:
             cells=pyvoro.compute_2d_voronoi(coords,bounds,maximumdistance, periodic=[False,False], radii=radii, z_height=200)
         except Exception as e:
@@ -460,7 +460,7 @@ def voronoi2dxy(xy,framenumber,maximumdistance,radii, save=True):
             print ("Attempting Reduced Radii Voronoi")
             cells=pyvoro.compute_2d_voronoi(coords,bounds,maximumdistance, periodic=[False,False], radii=radii*0.9, z_height=200)
         # if save:
-            
+
         #     d=shelve.open(shelveName)
         #     d['cells']=cells
         #     d.close()
@@ -469,7 +469,7 @@ def voronoi2dxy(xy,framenumber,maximumdistance,radii, save=True):
 
 
 
-@autojit
+@jit
 def similar(type_series, len_neighs, edges):
     similarity=np.zeros(len(len_neighs))
     for i in range(len(len_neighs)-1):
@@ -481,7 +481,7 @@ def similar(type_series, len_neighs, edges):
             if edges[i]==False and edges[j]==False:
                 # check for similarity
                 # 1 - check for the number of neighbours
-                if len_neighs[i]==len_neighs[j]:          
+                if len_neighs[i]==len_neighs[j]:
                     # 2 - check the types of neighbours in the right order
             #         # to do so, double the string representing the types of neioghbours
             #         # and check that the types of 1 are in types of 2
@@ -524,6 +524,3 @@ def voronoi_similarity2d(cells, types):
  #        codes.append(Path.CLOSEPOLY)
  #        path=Path(vertices,codes)
  #        pylab_module
-         
-
-
