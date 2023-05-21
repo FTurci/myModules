@@ -20,7 +20,7 @@ def num_word(word,words, verbose=False):
     if verbose:
         print("<num_word> detected:",word, floats)
     if len(floats)==0:
-        ints = re.compile(f'{word}'+'(\d+)').findall(words)
+        ints = re.compile(f'{word}'+'(-?\d+)').findall(words)
         return int(ints[0])
     else:
         return float(floats[0])
