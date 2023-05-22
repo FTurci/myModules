@@ -16,7 +16,7 @@ def stampa(*args,symbol=None,**kwargs):
 def num_word(word,words, verbose=False):
     """Returns the first number after a certain word in a string of words."""
     # try float
-    floats = re.compile(f'{word}'+'(\d+\.\d+)').findall(words)
+    floats = re.compile(f'{word}'+'(\d+\.?\d+)').findall(words)
     if verbose:
         print("<num_word> detected:",word, floats)
     if len(floats)==0:
